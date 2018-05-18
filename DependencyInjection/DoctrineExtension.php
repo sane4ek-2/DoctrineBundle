@@ -15,6 +15,7 @@
 namespace Doctrine\Bundle\DoctrineBundle\DependencyInjection;
 
 use Doctrine\ORM\Version;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -486,6 +487,8 @@ class DoctrineExtension extends AbstractDoctrineExtension
             ->setArguments(array(
                 new Reference(sprintf('doctrine.dbal.%s_connection', $entityManager['connection'])),
                 new Reference(sprintf('doctrine.orm.%s_configuration', $entityManager['name'])),
+                null,
+                new Reference(sprintf('doctrine.dbal.%s_shard_manager', $entityManager['name']), ContainerInterface::IGNORE_ON_INVALID_REFERENCE)
             ))
             ->setConfigurator(array(new Reference($managerConfiguratorName), 'configure'))
         ;
